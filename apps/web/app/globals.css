@@ -2,6 +2,54 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ── Design System CSS Custom Properties ──────────────────────────────────── */
+:root {
+  /* Color tokens */
+  --color-bg-primary: #F5F7FB;
+  --color-bg-surface: #FFFFFF;
+  --color-bg-hover: #F0F4FF;
+  --color-border-default: #E5EAF3;
+  --color-text-primary: #1E293B;
+  --color-text-secondary: #64748B;
+  --color-accent-primary: #2563EB;
+  --color-accent-soft: #DBEAFE;
+  --color-success: #16A34A;
+  --color-danger: #DC2626;
+
+  /* Spacing tokens */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 12px;
+  --spacing-lg: 16px;
+  --spacing-xl: 24px;
+  --spacing-2xl: 32px;
+  --spacing-3xl: 48px;
+}
+
+/* ── Base Styles ──────────────────────────────────────────────────────────── */
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 body {
-  @apply bg-gray-50 text-gray-900;
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+}
+
+/* ── Focus Ring ───────────────────────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--color-accent-primary);
+  outline-offset: 2px;
+}
+
+/* ── Reduced Motion ───────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

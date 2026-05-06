@@ -111,7 +111,7 @@ describe("TodoList", () => {
     render(<TodoList />);
     const allBtn = screen.getByRole("button", { name: /^all \(\d+\)$/i });
     expect(allBtn.className).toContain("focus:ring-2");
-    expect(allBtn.className).toContain("focus:ring-blue-500");
+    expect(allBtn.className).toContain("focus:ring-accent-primary");
     expect(allBtn.className).toContain("focus:outline-none");
   });
 });
