@@ -12,10 +12,10 @@
     "test:e2e": "playwright test"
   },
   "dependencies": {
+    "@paraymd/api-client": "workspace:*",
     "@paraymd/db": "workspace:*",
     "@paraymd/types": "workspace:*",
     "@paraymd/utils": "workspace:*",
-    "@paraymd/api-client": "workspace:*",
     "@tanstack/react-query": "^5.40.0",
     "next": "14.2.3",
     "react": "^18.3.0",
@@ -24,6 +24,10 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.44.0",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/jest": "^30.0.0",
     "@types/node": "^20.0.0",
     "@types/react": "^18.3.0",
     "@types/react-dom": "^18.3.0",

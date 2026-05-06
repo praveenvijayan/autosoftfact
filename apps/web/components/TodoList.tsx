@@ -19,6 +19,23 @@ export const TodoList = memo(function TodoList() {
 
   const handleFilterChange = useCallback((f: Filter) => setFilter(f), []);
 
+  // Counts per filter for badge display (#35)
+  const allCount = todos?.length ?? 0;
+  const todoCount = useMemo(
+    () => todos?.filter((t) => t.status === "TODO").length ?? 0,
+    [todos]
+  );
+  const completeCount = useMemo(
+    () => todos?.filter((t) => t.status === "COMPLETE").length ?? 0,
+    [todos]
+  );
+
+  const filterCounts: Record<Filter, number> = {
+    ALL: allCount,
+    TODO: todoCount,
+    COMPLETE: completeCount,
+  };
+
   // Filter todos (#35)
   const filtered = useMemo(
     () =>
@@ -32,20 +49,20 @@ export const TodoList = memo(function TodoList() {
 
   return (
     <div>
-      {/* Filter buttons (#35) */}
+      {/* Filter buttons (#35 #36) */}
       <div className="flex gap-2 mb-4" role="group" aria-label="Filter todos">
         {FILTERS.map(({ label, value }) => (
           <button
             key={value}
             onClick={() => handleFilterChange(value)}
-            className={`px-3 py-1 rounded-full text-sm border transition-colors ${
+            className={`px-3 py-1 rounded-full text-sm border transition-colors focus:ring-2 focus:ring-blue-500 focus:outline-none ${
               filter === value
                 ? "bg-blue-600 text-white border-blue-600"
                 : "bg-white text-gray-600 border-gray-300 hover:border-blue-400"
             }`}
             aria-pressed={filter === value}
           >
-            {label}
+            {label} ({filterCounts[value]})
           </button>
         ))}
       </div>
