@@ -3,10 +3,26 @@ node_modules
 dist
 *.db
 *.db-journal
-# Ignore secret/production env files but allow committed dev .env files
+
+# Environment files — never commit secrets
+.env
 .env.local
 .env.production
 .env*.local
+
+# macOS metadata
+.DS_Store
+**/.DS_Store
+
+# Editor / tooling directories
+.claude/
+
+# Next.js generated files
+apps/web/next-env.d.ts
+
+# TypeScript incremental build cache
+*.tsbuildinfo
+
 coverage
 playwright-report
 test-results
