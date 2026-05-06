@@ -19,6 +19,8 @@ const config = {
       "<rootDir>/../../packages/types/src/index.ts",
     "^@paraymd/api-client$":
       "<rootDir>/../../packages/api-client/src/index.ts",
+    "^@paraymd/db$":
+      "<rootDir>/../../packages/db/src/index.ts",
   },
   collectCoverageFrom: [
     "app/**/*.{ts,tsx}",
