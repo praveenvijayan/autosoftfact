@@ -23,7 +23,7 @@ describe("TodoInput", () => {
 
   it("renders the input and add button", () => {
     render(<TodoInput />);
-    expect(screen.getByRole("textbox", { name: /new todo title/i })).toBeInTheDocument();
+    expect(screen.getByRole("textbox", { name: /add a new todo/i })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /add todo/i })).toBeInTheDocument();
   });
 

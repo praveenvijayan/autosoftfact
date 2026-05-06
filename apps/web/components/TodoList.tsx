@@ -3,15 +3,14 @@
 import { memo, useState, useCallback, useMemo } from "react";
 import { useTodos } from "@/hooks/useTodos";
 import { TodoItem } from "./TodoItem";
-import type { TodoStatus } from "@paraymd/types";
+import { FilterTabs, type Filter } from "./FilterTabs";
+import { EmptyState } from "./EmptyState";
 
-type Filter = "ALL" | TodoStatus;
-
-const FILTERS: { label: string; value: Filter }[] = [
-  { label: "All", value: "ALL" },
-  { label: "Todo", value: "TODO" },
-  { label: "Complete", value: "COMPLETE" },
-];
+const FILTER_LABELS: Record<Filter, string> = {
+  ALL: "All",
+  TODO: "Todo",
+  COMPLETE: "Complete",
+};
 
 export const TodoList = memo(function TodoList() {
   const [filter, setFilter] = useState<Filter>("ALL");
@@ -19,24 +18,26 @@ export const TodoList = memo(function TodoList() {
 
   const handleFilterChange = useCallback((f: Filter) => setFilter(f), []);
 
-  // Counts per filter for badge display (#35)
-  const allCount = todos?.length ?? 0;
-  const todoCount = useMemo(
-    () => todos?.filter((t) => t.status === "TODO").length ?? 0,
-    [todos]
-  );
-  const completeCount = useMemo(
-    () => todos?.filter((t) => t.status === "COMPLETE").length ?? 0,
-    [todos]
+  // Compute counts per filter
+  const counts = useMemo(() => {
+    const all = todos?.length ?? 0;
+    const complete = todos?.filter((t) => t.status === "COMPLETE").length ?? 0;
+    const todo = todos?.filter((t) => t.status === "TODO").length ?? 0;
+    return { ALL: all, TODO: todo, COMPLETE: complete };
+  }, [todos]);
+
+  // Build filter options with counts
+  const filterOptions = useMemo(
+    () =>
+      (["ALL", "TODO", "COMPLETE"] as Filter[]).map((value) => ({
+        label: FILTER_LABELS[value],
+        value,
+        count: counts[value],
+      })),
+    [counts]
   );
 
-  const filterCounts: Record<Filter, number> = {
-    ALL: allCount,
-    TODO: todoCount,
-    COMPLETE: completeCount,
-  };
-
-  // Filter todos (#35)
+  // Filter todos
   const filtered = useMemo(
     () =>
       todos
@@ -49,40 +50,31 @@ export const TodoList = memo(function TodoList() {
 
   return (
     <div>
-      {/* Filter buttons (#35 #36) */}
-      <div className="flex gap-2 mb-4" role="group" aria-label="Filter todos">
-        {FILTERS.map(({ label, value }) => (
-          <button
-            key={value}
-            onClick={() => handleFilterChange(value)}
-            className={`px-3 py-1 rounded-full text-sm border transition-colors focus:ring-2 focus:ring-blue-500 focus:outline-none ${
-              filter === value
-                ? "bg-blue-600 text-white border-blue-600"
-                : "bg-white text-gray-600 border-gray-300 hover:border-blue-400"
-            }`}
-            aria-pressed={filter === value}
-          >
-            {label} ({filterCounts[value]})
-          </button>
-        ))}
+      {/* Filter tabs — reusable FilterTabs component */}
+      <div className="mb-lg">
+        <FilterTabs
+          filters={filterOptions}
+          activeFilter={filter}
+          onChange={handleFilterChange}
+        />
       </div>
 
-      {/* Loading state (#31) */}
+      {/* Loading skeleton — matches card height/shape */}
       {isLoading && (
-        <div aria-label="Loading todos" role="status">
+        <div aria-label="Loading todos" role="status" className="space-y-sm">
           {[1, 2, 3].map((i) => (
             <div
               key={i}
-              className="animate-pulse bg-gray-200 rounded-lg h-12 mb-2"
+              className="animate-pulse bg-border-default rounded-card h-14"
             />
           ))}
         </div>
       )}
 
-      {/* Error state (#31) */}
+      {/* Error state */}
       {isError && (
         <div
-          className="text-red-500 bg-red-50 border border-red-200 rounded-lg p-3 text-sm"
+          className="text-danger bg-red-50 border border-red-200 rounded-card p-md text-sm"
           role="alert"
         >
           Failed to load todos:{" "}
@@ -92,17 +84,28 @@ export const TodoList = memo(function TodoList() {
 
       {/* Empty state */}
       {!isLoading && !isError && filtered.length === 0 && (
-        <p className="text-center text-gray-400 py-10 text-sm">
-          {filter === "ALL"
-            ? "No todos yet. Add one above!"
-            : `No ${filter.toLowerCase()} todos.`}
-        </p>
+        <EmptyState
+          message={
+            filter === "ALL"
+              ? "No todos yet. Add one above!"
+              : `No ${filter.toLowerCase()} todos.`
+          }
+          description={
+            filter === "ALL" ? "Your task list is clear." : undefined
+          }
+        />
       )}
 
-      {/* Todo items */}
-      {filtered.map((todo) => (
-        <TodoItem key={todo.id} todo={todo} />
-      ))}
+      {/* Todo items list */}
+      {!isLoading && !isError && filtered.length > 0 && (
+        <ul className="space-y-sm" aria-label="Todo list">
+          {filtered.map((todo) => (
+            <li key={todo.id}>
+              <TodoItem todo={todo} />
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 });
