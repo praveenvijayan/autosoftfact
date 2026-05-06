@@ -35,17 +35,25 @@ describe("TodoList", () => {
     expect(screen.getAllByTestId("todo-item")).toHaveLength(3);
   });
 
-  it("renders filter buttons (#35)", () => {
+  it("renders filter buttons with counts (#35)", () => {
     render(<TodoList />);
-    expect(screen.getByRole("button", { name: /^all$/i })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /^todo$/i })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /^complete$/i })).toBeInTheDocument();
+    // Buttons now show counts, e.g. "All (3)", "Todo (2)", "Complete (1)"
+    expect(screen.getByRole("button", { name: /^all \(\d+\)$/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /^todo \(\d+\)$/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /^complete \(\d+\)$/i })).toBeInTheDocument();
+  });
+
+  it("shows correct counts on filter buttons (#35)", () => {
+    render(<TodoList />);
+    expect(screen.getByRole("button", { name: /^all \(3\)$/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /^todo \(2\)$/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /^complete \(1\)$/i })).toBeInTheDocument();
   });
 
   it("filters to only TODO items (#35)", async () => {
     const user = userEvent.setup();
     render(<TodoList />);
-    await user.click(screen.getByRole("button", { name: /^todo$/i }));
+    await user.click(screen.getByRole("button", { name: /^todo \(\d+\)$/i }));
     const items = screen.getAllByTestId("todo-item");
     expect(items).toHaveLength(2);
     expect(screen.getByText("First todo")).toBeInTheDocument();
@@ -56,7 +64,7 @@ describe("TodoList", () => {
   it("filters to only COMPLETE items (#35)", async () => {
     const user = userEvent.setup();
     render(<TodoList />);
-    await user.click(screen.getByRole("button", { name: /^complete$/i }));
+    await user.click(screen.getByRole("button", { name: /^complete \(\d+\)$/i }));
     const items = screen.getAllByTestId("todo-item");
     expect(items).toHaveLength(1);
     expect(screen.getByText("Second todo")).toBeInTheDocument();
@@ -87,15 +95,23 @@ describe("TodoList", () => {
       data: TODOS.filter((t) => t.status === "TODO"),
     });
     render(<TodoList />);
-    await user.click(screen.getByRole("button", { name: /^complete$/i }));
+    await user.click(screen.getByRole("button", { name: /^complete \(\d+\)$/i }));
     expect(screen.getByText(/no complete todos/i)).toBeInTheDocument();
   });
 
   it("highlights the active filter button (#35)", async () => {
     const user = userEvent.setup();
     render(<TodoList />);
-    await user.click(screen.getByRole("button", { name: /^todo$/i }));
-    expect(screen.getByRole("button", { name: /^todo$/i })).toHaveAttribute("aria-pressed", "true");
-    expect(screen.getByRole("button", { name: /^all$/i })).toHaveAttribute("aria-pressed", "false");
+    await user.click(screen.getByRole("button", { name: /^todo \(\d+\)$/i }));
+    expect(screen.getByRole("button", { name: /^todo \(\d+\)$/i })).toHaveAttribute("aria-pressed", "true");
+    expect(screen.getByRole("button", { name: /^all \(\d+\)$/i })).toHaveAttribute("aria-pressed", "false");
+  });
+
+  it("filter buttons have keyboard focus styles (#36)", () => {
+    render(<TodoList />);
+    const allBtn = screen.getByRole("button", { name: /^all \(\d+\)$/i });
+    expect(allBtn.className).toContain("focus:ring-2");
+    expect(allBtn.className).toContain("focus:ring-blue-500");
+    expect(allBtn.className).toContain("focus:outline-none");
   });
 });
