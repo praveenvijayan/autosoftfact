@@ -10,23 +10,22 @@ A full-stack Todo app built with **Turborepo**, **Next.js 14 (App Router)**, **P
 ## Setup
 
 ```bash
-# 1. Install dependencies
+# 1. Install dependencies (Prisma client is auto-generated via postinstall)
 pnpm install
 
-# 2. Generate Prisma client
-pnpm --filter @paraymd/db db:generate
-
-# 3. Run migration (creates dev.db)
+# 2. Run migration (creates packages/db/prisma/dev.db)
 pnpm --filter @paraymd/db db:migrate
 
-# 4. Seed the database
+# 3. Seed the database
 pnpm --filter @paraymd/db db:seed
 
-# 5. Start the dev server
+# 4. Start the dev server
 pnpm dev
 ```
 
 The app runs at http://localhost:3000.
+
+> **Note:** `DATABASE_URL` is pre-configured in `apps/web/.env` — no manual env setup needed for local development.
 
 ## Available scripts
 

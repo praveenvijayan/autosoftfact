@@ -3,8 +3,12 @@ node_modules
 dist
 *.db
 *.db-journal
-.env
+# Ignore secret/production env files but allow committed dev .env files
 .env.local
+.env.production
+.env*.local
+# Ignore the db package .env (DATABASE_URL is set in apps/web/.env instead)
+packages/db/.env
 coverage
 playwright-report
 test-results
