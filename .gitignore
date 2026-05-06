@@ -1,0 +1,29 @@
+node_modules
+.next
+dist
+*.db
+*.db-journal
+
+# Environment files — never commit secrets
+.env
+.env.local
+.env.production
+.env*.local
+
+# macOS metadata
+.DS_Store
+**/.DS_Store
+
+# Editor / tooling directories
+.claude/
+
+# Next.js generated files
+apps/web/next-env.d.ts
+
+# TypeScript incremental build cache
+*.tsbuildinfo
+
+coverage
+playwright-report
+test-results
+.turbo
