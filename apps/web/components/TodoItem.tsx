@@ -30,8 +30,8 @@ export const TodoItem = memo(function TodoItem({ todo }: TodoItemProps) {
   return (
     <div
       className={[
-        // Surface card
-        "group flex items-center gap-md",
+        // Surface card + soft entry animation
+        "group flex items-center gap-md animate-fade-in-up",
         "bg-bg-surface border border-border-default rounded-card",
         "px-lg py-md shadow-card",
         // Hover: soft background shift

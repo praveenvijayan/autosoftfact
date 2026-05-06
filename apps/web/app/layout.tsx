@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
+import { AppShell } from "@/components/AppShell";
+import { Sidebar } from "@/components/Sidebar";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -21,8 +23,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={inter.variable}>
-      <body className="font-sans bg-bg-primary text-text-primary min-h-screen">
-        <Providers>{children}</Providers>
+      <body className="font-sans bg-bg-primary text-text-primary">
+        <Providers>
+          <AppShell sidebar={<Sidebar />}>
+            {children}
+          </AppShell>
+        </Providers>
       </body>
     </html>
   );
