@@ -2,6 +2,7 @@
   "name": "@paraymd/web",
   "version": "0.0.1",
   "scripts": {
+    "predev": "pnpm --filter @paraymd/db db:migrate-deploy",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",

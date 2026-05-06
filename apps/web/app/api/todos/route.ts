@@ -14,7 +14,8 @@ export async function GET(): Promise<NextResponse<ApiResponse<unknown[]>>> {
       orderBy: { createdAt: "desc" },
     });
     return NextResponse.json({ data: todos, error: null });
-  } catch {
+  } catch (err) {
+    console.error("[GET /api/todos]", err);
     return NextResponse.json(
       { data: null, error: "Failed to fetch todos" },
       { status: 500 }
@@ -42,7 +43,8 @@ export async function POST(
     });
 
     return NextResponse.json({ data: todo, error: null }, { status: 201 });
-  } catch {
+  } catch (err) {
+    console.error("[POST /api/todos]", err);
     return NextResponse.json(
       { data: null, error: "Failed to create todo" },
       { status: 500 }

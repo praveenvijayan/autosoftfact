@@ -45,6 +45,7 @@ export async function PATCH(
         { status: 404 }
       );
     }
+    console.error("[PATCH /api/todos/:id]", err);
     return NextResponse.json(
       { data: null, error: "Failed to update todo" },
       { status: 500 }
@@ -76,6 +77,7 @@ export async function DELETE(
         { status: 404 }
       );
     }
+    console.error("[DELETE /api/todos/:id]", err);
     return NextResponse.json(
       { data: null, error: "Failed to delete todo" },
       { status: 500 }

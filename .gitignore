@@ -7,8 +7,6 @@ dist
 .env.local
 .env.production
 .env*.local
-# Ignore the db package .env (DATABASE_URL is set in apps/web/.env instead)
-packages/db/.env
 coverage
 playwright-report
 test-results
